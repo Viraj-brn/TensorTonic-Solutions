@@ -6,21 +6,19 @@ def pad_sequences(seqs, pad_value=0, max_len=None):
       N = len(seqs)
       L = max_len if provided else max(len(seq) for seq in seqs) or 0
     """
+    if not seqs:
+        return np.empty((0, max_len or 0))
+
     if max_len is None:
         max_len = max(len(seq) for seq in seqs)
-        for seq in seqs:
-            while len(seq)<max_len:
-                seq.append(pad_value)
 
-    else:
-        for seq in seqs:
-            if len(seq)>max_len:
-                while len(seq)>max_len:
-                    seq.pop()
-            elif len(seq)<max_len:
-                while len(seq)<max_len:
-                    seq.append(pad_value)
-
-    return seqs
+    N = len(seqs)
+    padded_matrix = np.full((N, max_len), pad_value)
     # Your code here
+    for i, seq in enumerate(seqs):
+        truc_seq = seq[:max_len]
+
+        padded_matrix[i, :len(truc_seq)] = truc_seq
+
+    return padded_matrix
     pass
